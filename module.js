@@ -37,6 +37,18 @@ function startModule() {
                 output.innerHTML = "Invalid conversion command.";
             }
         }
+        // Handle Variable Algebra (e.g., X + Y = 10)
+        else if (input.includes("X") || input.includes("Y")) {
+            const equation = input.replace("X", "x").replace("Y", "y"); // Normalize variables
+            const result = solveEquation(equation); // Solve the equation
+            output.innerHTML = `Result: ${result}`;
+        }
+        // Handle Advanced Math (e.g., sin, cos, log)
+        else if (input.startsWith("$advanced")) {
+            const expression = input.split("q=")[1]; // Extract the advanced math expression
+            const result = solveAdvancedMath(expression); // Solve the advanced math
+            output.innerHTML = `Result: ${result}`;
+        }
         // Invalid Command
         else if (input === "$start") {
             output.innerHTML = "Module started! Type your commands.";
@@ -46,4 +58,34 @@ function startModule() {
     } catch (error) {
         output.innerHTML = `Error: ${error.message}`;
     }
-                                          }
+}
+
+// Function to solve algebraic equations like "X + 2 = 10"
+function solveEquation(equation) {
+    try {
+        const math = require('mathjs'); // Import mathjs library for solving equations
+        const simplified = math.simplify(equation); // Simplify the equation
+        return simplified.toString(); // Return simplified expression
+    } catch (error) {
+        return "Error solving equation: " + error.message;
+    }
+}
+
+// Function to solve advanced math operations like sin, cos, log, etc.
+function solveAdvancedMath(expression) {
+    try {
+        // Use Math.js or JavaScript built-in math functions for advanced operations
+        expression = expression.replace(/sin(.*?)/g, 'Math.sin($1)');
+        expression = expression.replace(/cos(.*?)/g, 'Math.cos($1)');
+        expression = expression.replace(/tan(.*?)/g, 'Math.tan($1)');
+        expression = expression.replace(/log(.*?)/g, 'Math.log10($1)'); // log base 10
+        expression = expression.replace(/ln(.*?)/g, 'Math.log($1)'); // natural log (ln)
+        expression = expression.replace(/pi/g, 'Math.PI'); // π constant
+        expression = expression.replace(/e/g, 'Math.E'); // Euler's constant (e)
+
+        const result = eval(expression); // Evaluate the advanced math expression
+        return result;
+    } catch (error) {
+        return "Error evaluating advanced math: " + error.message;
+    }
+                       }
