@@ -37,6 +37,12 @@ function startModule() {
                 output.innerHTML = "Invalid conversion command.";
             }
         }
+        // Handle Chemical Formula Parsing
+        else if (input.startsWith("$chemical")) {
+            const formula = input.split("=")[1].trim(); // Extract formula after the '=' sign
+            const result = calculateMolarMass(formula); // Calculate molar mass
+            output.innerHTML = `Molar mass of ${formula} is ${result} g/mol.`;
+        }
         // Handle Variable Algebra (e.g., X + Y = 10)
         else if (input.includes("X") || input.includes("Y")) {
             const equation = input.replace("X", "x").replace("Y", "y"); // Normalize variables
@@ -88,4 +94,50 @@ function solveAdvancedMath(expression) {
     } catch (error) {
         return "Error evaluating advanced math: " + error.message;
     }
-                       }
+}
+
+// Function to calculate molar mass of a chemical formula (simplified version)
+function calculateMolarMass(formula) {
+    const molarMasses = {
+        H: 1.008,
+        He: 4.0026,
+        Li: 6.94,
+        Be: 9.0122,
+        B: 10.81,
+        C: 12.011,
+        N: 14.007,
+        O: 15.999,
+        F: 18.998,
+        Ne: 20.180,
+        Na: 22.990,
+        Mg: 24.305,
+        Al: 26.982,
+        Si: 28.085,
+        P: 30.974,
+        S: 32.07,
+        Cl: 35.45,
+        K: 39.098,
+        Ar: 39.948,
+        Ca: 40.078,
+        Fe: 55.845,
+        Cu: 63.546,
+        Zn: 65.38,
+        Ag: 107.8682,
+        I: 126.9044,
+        Au: 196.9665
+    };
+
+    let mass = 0;
+    const regex = /([A-Z][a-z]*)(\d*)/g;
+    let match;
+    while ((match = regex.exec(formula)) !== null) {
+        const element = match[1];
+        const quantity = match[2] ? parseInt(match[2], 10) : 1;
+        if (molarMasses[element]) {
+            mass += molarMasses[element] * quantity;
+        } else {
+            return `Unknown element: ${element}`;
+        }
+    }
+    return mass.toFixed(2);
+           }
