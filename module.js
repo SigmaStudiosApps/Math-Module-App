@@ -130,14 +130,19 @@ function calculateMolarMass(formula) {
     let mass = 0;
     const regex = /([A-Z][a-z]*)(\d*)/g;
     let match;
+
+    // Handle the formula and calculate molar mass
     while ((match = regex.exec(formula)) !== null) {
-        const element = match[1];
-        const quantity = match[2] ? parseInt(match[2], 10) : 1;
+        const element = match[1]; // Element symbol
+        const quantity = match[2] ? parseInt(match[2], 10) : 1; // Quantity of the element
+
         if (molarMasses[element]) {
-            mass += molarMasses[element] * quantity;
+            mass += molarMasses[element] * quantity; // Add to total mass
         } else {
-            return `Unknown element: ${element}`;
+            return `Unknown element: ${element}`; // If an unknown element is found
         }
     }
+
+    // Return the molar mass, rounded to 2 decimal places
     return mass.toFixed(2);
-           }
+                    }
