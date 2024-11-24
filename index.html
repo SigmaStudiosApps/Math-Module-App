@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Math Module</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="container">
@@ -18,5 +19,15 @@
         <div class="output" id="output"></div>
     </div>
     <script src="module.js"></script>
+    <script>
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js').then(() => {
+                console.log("Service Worker Registered");
+            }).catch(err => {
+                console.error("Service Worker Registration Failed:", err);
+            });
+        }
+    </script>
 </body>
 </html>
